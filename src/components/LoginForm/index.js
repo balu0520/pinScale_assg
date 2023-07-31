@@ -30,23 +30,39 @@ const LoginForm = () => {
         event.preventDefault()
         const url = "https://bursting-gelding-24.hasura.app/api/rest/get-user-id"
         const userDetails = { email, password }
-        axios.post(url,{
-            params:userDetails,
+        const options = {
+            method: 'GET',
             headers: {
                 'content-type': 'application/json',
-                'x-hasura-admin-secret':'g08A3qQy00y8yFDq3y6N1ZQnhOPOa4msdie5EtKS1hFStar01JzPKrtKEzYY2BtF'
-              },
-        }).then(response => {
+                'x-hasura-admin-secret': 'g08A3qQy00y8yFDq3y6N1ZQnhOPOa4msdie5EtKS1hFStar01JzPKrtKEzYY2BtF'
+            },
+            body: JSON.stringify(userDetails)
+        }
+        // axios.post(url,{
+        //     params:userDetails,
+        //     headers: {
+        //         'content-type': 'application/json',
+        //         'x-hasura-admin-secret':'g08A3qQy00y8yFDq3y6N1ZQnhOPOa4msdie5EtKS1hFStar01JzPKrtKEzYY2BtF'
+        //       },
+        // }).then(response => {
+        //     console.log(response)
+        //     
+        // }).catch(error => {
+        //     console.error('Error:', error);
+        //     onSubmitFailure(error);
+        //   });
+        try {
+            const response = await fetch(url, options)
             console.log(response)
-            if (response.status === 200) {
+            if (response.ok === true) {
                 onSubmitSuccess(response.data.get_user_id)
             } else {
                 onSubmitFailure(response.data)
             }
-        }).catch(error => {
-            console.error('Error:', error);
-            onSubmitFailure(error);
-          });
+        } catch (error) {
+            console.error(error)
+        }
+
     }
 
     return (
